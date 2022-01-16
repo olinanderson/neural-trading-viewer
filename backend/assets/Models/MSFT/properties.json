@@ -1,0 +1,1 @@
+{"properties":{"trainingRatio":1,"epochs":300,"batchSize":500,"timeSteps":10,"validationSplit":0.2,"timeStarted":1622521683629,"timeEnded":1622521699000}}

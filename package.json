@@ -1,0 +1,23 @@
+{
+  "name": "neural-trading-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olinanderson/neural-trading-viewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olinanderson/neural-trading-viewer/issues"
+  },
+  "homepage": "https://github.com/olinanderson/neural-trading-viewer#readme",
+  "dependencies": {
+    "concurrently": "^7.0.0"
+  }
+}

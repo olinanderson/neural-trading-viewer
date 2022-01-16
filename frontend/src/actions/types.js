@@ -1,0 +1,6 @@
+export const GET_OHLC = "GET_OHLC";
+export const GET_OHLC_FAIL = "GET_OHLC_FAIL";
+export const GET_PREDICTIONS = "GET_PREDICTIONS";
+export const GET_PREDICTIONS_FAIL = "GET_PREDICTIONS_FAIL";
+export const GET_BOT_BUY_SELL = "GET_BOT_BUY_SELL";
+export const GET_BOT_BUY_SELL_FAIL = "GET_BOT_BUY_SELL_FAIL";

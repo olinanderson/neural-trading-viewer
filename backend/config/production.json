@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://olinanderson:30031541Treehouse18!@personalprojects-7qlhe.mongodb.net/NeuralTrading-Production?retryWrites=true&w=majority",
+  "jwtSecret": "This is my secret website token"
+}

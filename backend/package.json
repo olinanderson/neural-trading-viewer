@@ -1,0 +1,36 @@
+{
+  "name": "neural-trading-viewer",
+  "version": "1.0.0",
+  "description": "OHLCV data stream and neural network predictions for sending stock trading decisions to database. Live feed on web. ",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server",
+    "start": "node --max_old_space_size=8192 --optimize_for_size server",
+    "server": "nodemon server",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "test": "jest"
+  },
+  "author": "Olin Anderson",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^3.11.0",
+    "@tensorflow/tfjs-node-gpu": "^3.11.0",
+    "axios": "^0.24.0",
+    "chalk": "^4.1.2",
+    "config": "^3.3.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "finnhub": "^1.2.7",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.21",
+    "mathjs": "^10.0.0",
+    "mongoose": "^6.0.13",
+    "node-fetch": "^3.1.0",
+    "node-schedule-tz": "^1.2.1-4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5",
+    "nodemon": "^2.0.15"
+  }
+}
