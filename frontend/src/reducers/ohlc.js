@@ -1,6 +1,9 @@
 import { GET_OHLC, GET_OHLC_FAIL } from "../actions/types";
 
-const initialState = { ohlcDay: {}, ohlcDayLoading: true };
+const initialState = {
+  ohlcDay: null,
+  ohlcDayLoading: true
+};
 
 export default function (state = initialState, action) {
   const { type, payload } = action;

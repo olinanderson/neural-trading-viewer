@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
-import realtime from "./realtime";
-import neural_network from "./neural_network";
+import ohlc from "./ohlc";
+import buySell from "./buySell";
+import bot from "./bot";
 
 export default combineReducers({
-  realtime,
-  neural_network,
+  ohlc,
+  buySell,
+  bot,
 });
