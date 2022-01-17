@@ -4,8 +4,12 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  buySellDay: null,
-  buySellDayLoading: true,
+  buySellDay: {
+    ticker: null,
+    day: null,
+    buySellDaysArray: []
+  },
+  isLoading: true,
 };
 
 export default function (state = initialState, action) {
@@ -13,9 +17,9 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case GET_BUY_SELL:
-      return { ...state, buySellDay: payload, buySellDayLoading: false };
+      return { ...state, buySellDay: payload, isLoading: false };
     case GET_BUY_SELL_FAIL:
-      return { ...state, buySellDayLoading: false };
+      return { ...state, isLoading: false };
     default:
       return { ...state };
   }

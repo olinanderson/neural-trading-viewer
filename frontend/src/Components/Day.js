@@ -8,11 +8,11 @@ import store from "../store";
 
 // External Packages 
 import DatePicker from 'react-date-picker';
+import Charts from "./Charts/Charts";
 
 
 const Day = ({ ohlc, buySell, bot }) => {
 
-  console.log(ohlc, buySell, bot);
 
   const [value, onChange] = useState(new Date());
 
@@ -24,6 +24,7 @@ const Day = ({ ohlc, buySell, bot }) => {
           onChange={onChange}
           value={value}
         />
+        <Charts />
       </div>
     </Fragment>
   );

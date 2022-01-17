@@ -7,12 +7,24 @@ import {
 
 const initialState = {
   prediction: {
-    predictionDay: null,
-    predictionDayLoading: true,
+    predictionDay: {
+      ticker: null,
+      day: null,
+      predictionDaysArray: []
+    },
+    isLoading: true,
   },
   buySell: {
-    botBuySellDay: null,
-    botBuySellDayLoading: true,
+    buySellDay: {
+      ticker: null,
+      day: null,
+      railingStopPercent: null,
+      longDecisionBoundary: null,
+      shortDecisionBoundary: null,
+      resetDecisionBoundary: null,
+      botBuySellDaysArray: []
+    },
+    isLoading: true,
   }
 };
 
@@ -21,13 +33,13 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case GET_PREDICTIONS:
-      return { ...state, prediction: { ...state.prediction, predictionDay: payload, predictionDayLoading: false } };
+      return { ...state, prediction: { ...state.prediction, predictionDay: payload, isLoading: false } };
     case GET_PREDICTIONS_FAIL:
-      return { ...state, prediction: { ...state.prediction, predictionDayLoading: false } };
+      return { ...state, prediction: { ...state.prediction, isLoading: false } };
     case GET_BOT_BUY_SELL:
-      return { ...state, buySell: { ...state.buySell, buySellDay: payload, buySellDayLoading: false } };
+      return { ...state, buySell: { ...state.buySell, buySellDay: payload, isLoading: false } };
     case GET_BOT_BUY_SELL_FAIL:
-      return { ...state, buySell: { ...state.buySell, buySellDayLoading: false } };
+      return { ...state, buySell: { ...state.buySell, isLoading: false } };
     default:
       return { ...state };
   }

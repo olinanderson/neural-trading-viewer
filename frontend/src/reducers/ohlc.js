@@ -1,8 +1,12 @@
 import { GET_OHLC, GET_OHLC_FAIL } from "../actions/types";
 
 const initialState = {
-  ohlcDay: null,
-  ohlcDayLoading: true
+  ohlcDay: {
+    ticker: null,
+    day: null,
+    ohlcArray: []
+  },
+  isLoading: true
 };
 
 export default function (state = initialState, action) {
@@ -10,9 +14,9 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case GET_OHLC:
-      return { ...state, ohlcDay: payload, ohlcDayLoading: false };
+      return { ...state, ohlcDay: payload, isLoading: false };
     case GET_OHLC_FAIL:
-      return { ...state, ohlcDayLoading: false };
+      return { ...state, isLoading: false };
     default:
       return { ...state };
   }

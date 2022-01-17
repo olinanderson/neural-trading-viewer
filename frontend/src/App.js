@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import { initialRequests } from "./actions/initial";
 
 // Components
-import Realtime from "./components/Chart";
+import Charts from "./components/Charts/Charts";
 import Day from "./components/Day";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   return (
     <Provider store={store}>
       <Day />
-      {/* <Realtime /> */}
+      {/* <Charts /> */}
     </Provider>
   );
 }
