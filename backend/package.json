@@ -7,7 +7,7 @@
     "dev": "nodemon server",
     "start": "node --max_old_space_size=8192 --optimize_for_size server",
     "server": "nodemon server",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ../frontend && npm run build --prefix ../frontend",
     "test": "jest"
   },
   "author": "Olin Anderson",
