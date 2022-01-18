@@ -12,7 +12,7 @@ const initialState = {
   isLoading: true,
 };
 
-export default function (state = initialState, action) {
+export default function buySell(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {

@@ -7,20 +7,20 @@ import { connect } from "react-redux";
 import store from "../store";
 
 // External Packages 
-import DatePicker from 'react-date-picker';
+import Calendar from 'react-calendar';
 import Charts from "./Charts/Charts";
 
+import 'react-calendar/dist/Calendar.css';
 
-const Day = ({ ohlc, buySell, bot }) => {
 
+const Day = () => {
 
   const [value, onChange] = useState(new Date());
-
 
   return (
     <Fragment>
       <div className="daily-container">
-        <DatePicker
+        <Calendar
           onChange={onChange}
           value={value}
         />
@@ -31,15 +31,9 @@ const Day = ({ ohlc, buySell, bot }) => {
 };
 
 Day.propTypes = {
-  ohlc: PropTypes.object,
-  buySell: PropTypes.object,
-  bot: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
-  ohlc: state.ohlc,
-  buySell: state.buySell,
-  bot: state.bot,
 });
 
 export default connect(mapStateToProps, {})(Day);

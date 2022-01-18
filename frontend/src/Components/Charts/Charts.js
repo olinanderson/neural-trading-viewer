@@ -101,7 +101,7 @@ var Charts = ({
         botSell: 0,
         buy: 0,
         sell: 0,
-        prediction: 0,
+        prediction: 0.5,
       };
 
       // Optimized buy/sell 
@@ -109,7 +109,6 @@ var Charts = ({
 
       // Bots prediction buy/sell
       newObj = check(bot.buySell.isLoading, bot.buySell.buySellDay.botBuySellDaysArray.length, bot.buySell.buySellDay.botBuySellDaysArray, ohlcDay.ohlcArray[i].date, newObj);
-
 
       longArray.push(newObj);
     }
@@ -187,18 +186,24 @@ var Charts = ({
   };
 
   var totalHeight = 600;
+  var showPredictionChart = false;
+
   var candleStickHeight = 0.4 * totalHeight;
   var volumeHeight = 0.4 * candleStickHeight;
   var rsiHeight = 0.3 * totalHeight;
   var predictionHeight = 0.3 * totalHeight;
 
+  if (!bot.prediction.isLoading && bot.prediction.predictionDay.predictionDaysArray.length) {
+    showPredictionChart = true;
+  }
+
+  showPredictionChart = true;
+
   var margin = { left: 70, right: 70, top: 20, bottom: 30 };
 
-
-  const checkShowPrediction = (bot, predictionHeight, sma45, predictionSma10) => {
-    if (!bot.prediction.isLoading && bot.prediction.predictionDay.predictionDaysArray.length) {
+  const checkShowPrediction = (bot, predictionHeight, sma45, predictionSma10, showPredictionChart) => {
+    if (showPredictionChart) {
       return (
-
         <Chart
           id={4}
           yExtents={[0, 1]}
@@ -236,18 +241,17 @@ var Charts = ({
             yDisplayFormat={format(".2f")}
             origin={[-40, 15]}
           />
-
+          {/* 
           <SingleValueTooltip
             yAccessor={(d) => d.predictionSma10}
             yLabel={"SMA10"}
             yDisplayFormat={format(".2f")}
             origin={[-40, 15]}
-          />
+          /> */}
         </Chart>
       );
     }
   };
-
 
   return (
     <ChartCanvas
@@ -395,7 +399,7 @@ var Charts = ({
       </Chart>
 
       {/* Prediction Chart */}
-      {checkShowPrediction(bot, predictionHeight, sma45, predictionSma10)}
+      {checkShowPrediction(bot, predictionHeight, sma45, predictionSma10, showPredictionChart)}
 
     </ChartCanvas>
   );

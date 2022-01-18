@@ -10,8 +10,7 @@ import { Provider } from "react-redux";
 import { initialRequests } from "./actions/initial";
 
 // Components
-import Charts from "./components/Charts/Charts";
-import Day from "./components/Day";
+import Day from "./Components/Day";
 
 function App() {
   useEffect(() => {
@@ -21,7 +20,6 @@ function App() {
   return (
     <Provider store={store}>
       <Day />
-      {/* <Charts /> */}
     </Provider>
   );
 }
