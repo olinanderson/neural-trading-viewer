@@ -2,8 +2,22 @@ html {
   overflow-x: hidden;
 }
 
+.daily-container {
+  display: flex;
+}
+
 .react-calendar {
   margin: 20px;
+  float: left;
+}
+
+
+.data-stats .column {
+  float: left;
+}
+
+.column {
+  padding: 20px;
 }
 
 /* React Stockcharts */

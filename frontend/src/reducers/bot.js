@@ -19,7 +19,7 @@ const initialState = {
     buySellDay: {
       ticker: null,
       day: null,
-      railingStopPercent: null,
+      trailingStopPercent: null,
       longDecisionBoundary: null,
       shortDecisionBoundary: null,
       resetDecisionBoundary: null,

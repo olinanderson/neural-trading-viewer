@@ -673,6 +673,7 @@ const createBuySellDay = async (ticker) => {
       {
         ticker: ticker,
         day: new Date().toDateString(),
+        profit: 0,
         buySellDaysArray: [],
       },
       function (err, createdDoc) {

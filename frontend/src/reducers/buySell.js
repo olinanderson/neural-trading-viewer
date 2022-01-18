@@ -8,6 +8,7 @@ const initialState = {
   buySellDay: {
     ticker: null,
     day: null,
+    profit: 0,
     buySellDaysArray: []
   },
   isLoading: true,
