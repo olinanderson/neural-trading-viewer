@@ -22,9 +22,7 @@ router.get("/", async (req, res) => {
 router.get("/daysList", async (req, res) => {
   try {
 
-
     var query = await ohlcDay.find({ ticker: "MSFT" });
-
 
     let payload = [];
 
