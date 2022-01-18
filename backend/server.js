@@ -9,7 +9,7 @@ const axios = require("axios"),
   schedule = require("node-schedule-tz"),
   path = require("path"),
   fs = require("fs"),
-  tf = require("@tensorflow/tfjs-node-gpu"),
+  // tf = require("@tensorflow/tfjs-node-gpu"),
   chalk = require("chalk");
 
 dotenv.config();
@@ -368,96 +368,96 @@ const formatData = (ohlcDays, buySellDays, timeSteps) => {
   return { featureArray, labelArray };
 };
 
-const predictAndSave = (ticker) => {
-  try {
-    ohlcDay
-      .find({ ticker: ticker })
-      .sort({ _id: -1 })
-      .limit(2)
-      .exec(async (err, NumOfDays) => {
-        if (err) {
-          console.error(err.name, err.message, err.lineNumber);
-        } else {
-          try {
-            let ohlcDays = NumOfDays.reverse();
-            let buySellDays = [];
+// const predictAndSave = (ticker) => {
+//   try {
+//     ohlcDay
+//       .find({ ticker: ticker })
+//       .sort({ _id: -1 })
+//       .limit(2)
+//       .exec(async (err, NumOfDays) => {
+//         if (err) {
+//           console.error(err.name, err.message, err.lineNumber);
+//         } else {
+//           try {
+//             let ohlcDays = NumOfDays.reverse();
+//             let buySellDays = [];
 
-            for (let i = 0; i < NumOfDays.length; i++) {
-              buySellDays.push({
-                ticker: ohlcDays[i].ticker,
-                day: ohlcDays[i].day,
-                buySellDaysArray: [],
-              });
-            }
+//             for (let i = 0; i < NumOfDays.length; i++) {
+//               buySellDays.push({
+//                 ticker: ohlcDays[i].ticker,
+//                 day: ohlcDays[i].day,
+//                 buySellDaysArray: [],
+//               });
+//             }
 
-            var { featureArray } = formatData(ohlcDays, buySellDays, 10);
+//             var { featureArray } = formatData(ohlcDays, buySellDays, 10);
 
-            tf.engine().startScope();
+//             tf.engine().startScope();
 
-            // Load model for ticker
-            const model = await tf.loadLayersModel(
-              "file://assets/Models/" + ticker + "/model.json"
-            );
+//             // Load model for ticker
+//             const model = await tf.loadLayersModel(
+//               "file://assets/Models/" + ticker + "/model.json"
+//             );
 
-            if (featureArray.length) {
-              // Make prediction
-              // Starting scope, fixing memory issues?
-              prediction = model
-                .predict(tf.tensor([featureArray[featureArray.length - 1]]))
-                .dataSync()[0];
+//             if (featureArray.length) {
+//               // Make prediction
+//               // Starting scope, fixing memory issues?
+//               prediction = model
+//                 .predict(tf.tensor([featureArray[featureArray.length - 1]]))
+//                 .dataSync()[0];
 
-              console.log(
-                chalk.white.bold("Bots Prediction for " + ticker + ":"),
-                chalk.yellowBright(prediction)
-              );
+//               console.log(
+//                 chalk.white.bold("Bots Prediction for " + ticker + ":"),
+//                 chalk.yellowBright(prediction)
+//               );
 
-              let pushSaveObj = {
-                date: Math.floor(new Date().getTime() / 60000) * 60000, // divided by 100 000 because it will round the
-                prediction: prediction, // minute down because it's about 3 seconds behind
-                buy: false,
-                sell: false,
-              };
+//               let pushSaveObj = {
+//                 date: Math.floor(new Date().getTime() / 60000) * 60000, // divided by 100 000 because it will round the
+//                 prediction: prediction, // minute down because it's about 3 seconds behind
+//                 buy: false,
+//                 sell: false,
+//               };
 
-              await predictionDay
-                .findOne(
-                  { ticker: ticker, day: new Date().toDateString() },
-                  (err, predictionDay) => {
-                    if (err) {
-                      console.error(err.name, err.message, err.lineNumber);
-                    } else if (predictionDay !== null) {
-                      predictionDay.predictionDaysArray.push(pushSaveObj);
-                      predictionDay.save();
+//               await predictionDay
+//                 .findOne(
+//                   { ticker: ticker, day: new Date().toDateString() },
+//                   (err, predictionDay) => {
+//                     if (err) {
+//                       console.error(err.name, err.message, err.lineNumber);
+//                     } else if (predictionDay !== null) {
+//                       predictionDay.predictionDaysArray.push(pushSaveObj);
+//                       predictionDay.save();
 
-                      console.log(
-                        chalk.blueBright(
-                          "Updating predictionDay document for " +
-                          predictionDay.ticker +
-                          ", " +
-                          predictionDay.day
-                        )
-                      );
-                    } else {
-                      console.log("PredictionDay not found");
-                    }
-                  }
-                )
-                .clone();
-            } else {
-              console.log(
-                chalk.green("Not enough daily data to make a prediction")
-              );
-            }
-            tf.engine().endScope();
-            tf.disposeVariables();
-          } catch (err) {
-            console.error(chalk.red(err.name, err.message, err.lineNumber));
-          }
-        }
-      });
-  } catch (err) {
-    console.error(chalk.red(err.name, err.message, err.lineNumber));
-  }
-};
+//                       console.log(
+//                         chalk.blueBright(
+//                           "Updating predictionDay document for " +
+//                           predictionDay.ticker +
+//                           ", " +
+//                           predictionDay.day
+//                         )
+//                       );
+//                     } else {
+//                       console.log("PredictionDay not found");
+//                     }
+//                   }
+//                 )
+//                 .clone();
+//             } else {
+//               console.log(
+//                 chalk.green("Not enough daily data to make a prediction")
+//               );
+//             }
+//             tf.engine().endScope();
+//             tf.disposeVariables();
+//           } catch (err) {
+//             console.error(chalk.red(err.name, err.message, err.lineNumber));
+//           }
+//         }
+//       });
+//   } catch (err) {
+//     console.error(chalk.red(err.name, err.message, err.lineNumber));
+//   }
+// };
 
 // Database functions ----------------------------------------------
 const buySellAndSave = async (ticker) => {
