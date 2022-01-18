@@ -1,5 +1,5 @@
 // React 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // Redux
@@ -13,11 +13,41 @@ import Charts from "./Charts/Charts";
 import 'react-calendar/dist/Calendar.css';
 import Spinner from "./Spinner/Spinner";
 
+// Actions
+import { getDailyData } from "../actions/getDailyData";
+import { resetDailyData } from "../actions/general";
 
+const Day = ({ ohlc, getDailyData, resetDailyData }) => {
 
-const Day = ({ daysList }) => {
+  // Local states
+  const [value, setValue] = useState(new Date());
+  const [dayLoading, setDayLoading] = useState(true);
 
-  const [value, onChange] = useState(new Date());
+  const { daysList, isLoading } = ohlc;
+
+  const onChange = (value) => {
+    setValue(value);
+    setDayLoading(true);
+
+    resetDailyData();
+
+    getDailyData(value.toDateString(), false);
+  };
+
+  useEffect(() => {
+    console.log("isLoading", isLoading);
+    if (!isLoading) {
+      setDayLoading(false);
+    }
+  }, [isLoading]);
+
+  const check = (dayLoading) => {
+    if (dayLoading) {
+      return <Spinner />;
+    } else {
+      return <Charts />;
+    }
+  };
 
   return (
     <Fragment>
@@ -43,19 +73,20 @@ const Day = ({ daysList }) => {
             return bool;
           }}
         />
-
-        <Charts />
       </div>
+      {check(dayLoading)}
     </Fragment>
   );
 };
 
 Day.propTypes = {
-  daysList: PropTypes.array.isRequired,
+  ohlc: PropTypes.object.isRequired,
+  getDailyData: PropTypes.func.isRequired,
+  resetDailyData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  daysList: state.ohlc.daysList
+  ohlc: state.ohlc
 });
 
-export default connect(mapStateToProps, {})(Day);
+export default connect(mapStateToProps, { getDailyData, resetDailyData })(Day);

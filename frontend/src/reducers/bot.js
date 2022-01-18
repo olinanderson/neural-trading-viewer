@@ -3,6 +3,7 @@ import {
   GET_PREDICTIONS_FAIL,
   GET_BOT_BUY_SELL,
   GET_BOT_BUY_SELL_FAIL,
+  RESET_BOT
 } from "../actions/types";
 
 const initialState = {
@@ -35,11 +36,15 @@ export default function bot(state = initialState, action) {
     case GET_PREDICTIONS:
       return { ...state, prediction: { ...state.prediction, predictionDay: payload, isLoading: false } };
     case GET_PREDICTIONS_FAIL:
-      return { ...state, prediction: { ...state.prediction, isLoading: false } };
+      return { ...state, prediction: { ...initialState.prediction, isLoading: false } };
     case GET_BOT_BUY_SELL:
       return { ...state, buySell: { ...state.buySell, buySellDay: payload, isLoading: false } };
     case GET_BOT_BUY_SELL_FAIL:
-      return { ...state, buySell: { ...state.buySell, isLoading: false } };
+      return { ...state, buySell: { ...initialState.buySell, isLoading: false } };
+    case RESET_BOT:
+      return {
+        ...initialState
+      };
     default:
       return { ...state };
   }

@@ -1,6 +1,7 @@
 import {
   GET_BUY_SELL,
   GET_BUY_SELL_FAIL,
+  RESET_BUY_SELL,
 } from "../actions/types";
 
 const initialState = {
@@ -20,6 +21,10 @@ export default function buySell(state = initialState, action) {
       return { ...state, buySellDay: payload, isLoading: false };
     case GET_BUY_SELL_FAIL:
       return { ...state, isLoading: false };
+    case RESET_BUY_SELL:
+      return {
+        ...initialState
+      };
     default:
       return { ...state };
   }

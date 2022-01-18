@@ -1,4 +1,10 @@
-import { GET_OHLC, GET_OHLC_FAIL, GET_OHLC_DAYS_LIST, GET_OHLC_DAYS_LIST_FAIL } from "../actions/types";
+import {
+  GET_OHLC,
+  GET_OHLC_FAIL,
+  GET_OHLC_DAYS_LIST,
+  GET_OHLC_DAYS_LIST_FAIL,
+  RESET_OHLC
+} from "../actions/types";
 
 const initialState = {
   ohlcDay: {
@@ -22,6 +28,11 @@ export default function ohlc(state = initialState, action) {
       return { ...state, daysList: payload };
     case GET_OHLC_DAYS_LIST_FAIL:
       return { ...state };
+    case RESET_OHLC:
+      return {
+        ...initialState,
+        daysList: state.daysList
+      };
     default:
       return { ...state };
   }

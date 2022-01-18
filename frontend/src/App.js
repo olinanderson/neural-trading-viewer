@@ -7,14 +7,14 @@ import store from "./store";
 import { Provider } from "react-redux";
 
 // Actions
-import { initialRequests } from "./actions/initial";
+import { getDailyData } from "./actions/getDailyData";
 
 // Components
 import Day from "./Components/Day";
 
 function App() {
   useEffect(() => {
-    store.dispatch(initialRequests());
+    store.dispatch(getDailyData(new Date().toDateString(), true));
   }, []);
 
   return (

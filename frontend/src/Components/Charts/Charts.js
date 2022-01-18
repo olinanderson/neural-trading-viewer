@@ -185,13 +185,13 @@ var Charts = ({
     tooltip: "Go short",
   };
 
-  var totalHeight = 600;
+  var totalHeight = 450;
   var showPredictionChart = false;
 
-  var candleStickHeight = 0.4 * totalHeight;
+  var candleStickHeight = 0.6 * totalHeight;
   var volumeHeight = 0.4 * candleStickHeight;
-  var rsiHeight = 0.3 * totalHeight;
-  var predictionHeight = 0.3 * totalHeight;
+  var rsiHeight = 0.2 * totalHeight;
+  var predictionHeight = 0.2 * totalHeight;
 
   if (!bot.prediction.isLoading && bot.prediction.predictionDay.predictionDaysArray.length) {
     showPredictionChart = true;
