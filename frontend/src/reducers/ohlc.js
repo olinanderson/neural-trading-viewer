@@ -21,7 +21,7 @@ export default function ohlc(state = initialState, action) {
 
   switch (type) {
     case GET_OHLC:
-      return { ...state, ohlcDay: payload, isLoading: false };
+      return { ...state, ohlcDay: (payload !== null ? payload : state.state.ohlcDay), isLoading: false };
     case GET_OHLC_FAIL:
       return { ...state, isLoading: false };
     case GET_OHLC_DAYS_LIST:

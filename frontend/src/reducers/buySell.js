@@ -18,7 +18,7 @@ export default function buySell(state = initialState, action) {
 
   switch (type) {
     case GET_BUY_SELL:
-      return { ...state, buySellDay: payload, isLoading: false };
+      return { ...state, buySellDay: (payload !== null ? payload : state.buySellDay), isLoading: false };
     case GET_BUY_SELL_FAIL:
       return { ...state, isLoading: false };
     case RESET_BUY_SELL:

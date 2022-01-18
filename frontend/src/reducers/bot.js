@@ -34,11 +34,11 @@ export default function bot(state = initialState, action) {
 
   switch (type) {
     case GET_PREDICTIONS:
-      return { ...state, prediction: { ...state.prediction, predictionDay: payload, isLoading: false } };
+      return { ...state, prediction: { ...state.prediction, predictionDay: (payload !== null ? payload : state.prediction.predictionDay), isLoading: false } };
     case GET_PREDICTIONS_FAIL:
       return { ...state, prediction: { ...initialState.prediction, isLoading: false } };
     case GET_BOT_BUY_SELL:
-      return { ...state, buySell: { ...state.buySell, buySellDay: payload, isLoading: false } };
+      return { ...state, buySell: { ...state.buySell, buySellDay: (payload !== null ? payload : state.buySell.buySellDay), isLoading: false } };
     case GET_BOT_BUY_SELL_FAIL:
       return { ...state, buySell: { ...initialState.buySell, isLoading: false } };
     case RESET_BOT:
