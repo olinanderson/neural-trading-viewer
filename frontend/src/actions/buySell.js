@@ -20,3 +20,6 @@ export const getBuySell = (day) => async (dispatch) => {
         });
     }
 };
+
+// buy 1642452600000
+// sell 1642459980000

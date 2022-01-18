@@ -65,8 +65,9 @@ app.use((req, res, next) => {
 });
 
 // API Routes
-app.use("/api/realtime", require("./routes/api/realtime"));
-app.use("/api/neural_network", require("./routes/api/neural_network"));
+app.use("/api/ohlc", require("./routes/api/ohlc"));
+app.use("/api/bot", require("./routes/api/bot"));
+app.use("/api/buySell", require("./routes/api/buySell"));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {

@@ -172,14 +172,14 @@ var Charts = ({
   const xExtents = [start, end];
 
   const longAnnotationProps = {
-    y: ({ yScale, datum }) => yScale(datum.close),
+    y: ({ yScale, datum }) => yScale(datum.low),
     fill: "#006517",
     path: buyPath,
     tooltip: "Go long",
   };
 
   const shortAnnotationProps = {
-    y: ({ yScale, datum }) => yScale(datum.close),
+    y: ({ yScale, datum }) => yScale(datum.high),
     fill: "#FF0000",
     path: sellPath,
     tooltip: "Go short",

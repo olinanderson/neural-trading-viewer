@@ -6,11 +6,11 @@ const express = require("express"),
 // @route GET api/charts
 // @desc Send chart data to front end
 // @access Public
-router.get("/bot_buy_sell/initial", async (req, res) => {
+router.get("/buySell", async (req, res) => {
   try {
     var query = await botBuySellDay.findOne({
       ticker: "MSFT",
-      day: new Date().toDateString(),
+      day: req.query.day,
     });
 
     res.json(query);
@@ -19,11 +19,11 @@ router.get("/bot_buy_sell/initial", async (req, res) => {
   }
 });
 
-router.get("/predictions/initial", async (req, res) => {
+router.get("/prediction", async (req, res) => {
   try {
     var query = await predictionDay.findOne({
       ticker: "MSFT",
-      day: new Date().toDateString(),
+      day: req.query.day,
     });
 
     res.json(query);

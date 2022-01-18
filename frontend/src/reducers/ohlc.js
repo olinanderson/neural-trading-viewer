@@ -1,4 +1,4 @@
-import { GET_OHLC, GET_OHLC_FAIL } from "../actions/types";
+import { GET_OHLC, GET_OHLC_FAIL, GET_OHLC_DAYS_LIST, GET_OHLC_DAYS_LIST_FAIL } from "../actions/types";
 
 const initialState = {
   ohlcDay: {
@@ -6,7 +6,8 @@ const initialState = {
     day: null,
     ohlcArray: []
   },
-  isLoading: true
+  isLoading: true,
+  daysList: [] // A list of all the days that are currently in the database for this ticker
 };
 
 export default function ohlc(state = initialState, action) {
@@ -17,6 +18,10 @@ export default function ohlc(state = initialState, action) {
       return { ...state, ohlcDay: payload, isLoading: false };
     case GET_OHLC_FAIL:
       return { ...state, isLoading: false };
+    case GET_OHLC_DAYS_LIST:
+      return { ...state, daysList: payload };
+    case GET_OHLC_DAYS_LIST_FAIL:
+      return { ...state };
     default:
       return { ...state };
   }
