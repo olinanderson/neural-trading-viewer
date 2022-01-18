@@ -7,9 +7,13 @@ import {
   GET_PREDICTIONS_FAIL,
 } from "./types";
 
-export const getBotBuySell = () => async (dispatch) => {
+export const getBotBuySell = (day) => async (dispatch) => {
   try {
-    let res = await axios.get("/api/neural_network/bot_buy_sell/initial");
+    let res = await axios.get("/api/bot/buySell", {
+      params: {
+        day: day
+      }
+    });
 
     await dispatch({
       type: GET_BOT_BUY_SELL,
@@ -22,9 +26,13 @@ export const getBotBuySell = () => async (dispatch) => {
   }
 };
 
-export const getPredictions = () => async (dispatch) => {
+export const getPredictions = (day) => async (dispatch) => {
   try {
-    let res = await axios.get("/api/neural_network/predictions/initial");
+    let res = await axios.get("/api/bot/prediction", {
+      params: {
+        day: day
+      }
+    });
 
     await dispatch({
       type: GET_PREDICTIONS,
