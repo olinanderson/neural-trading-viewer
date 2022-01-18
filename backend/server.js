@@ -88,6 +88,7 @@ if (process.env.NODE_ENV === "production") {
 schedule.scheduleJob("0 0 0 * * 1-5", () => {
   if (checkMarketOpen(new Date(), holidays)) {
     checkAndCreateDailyDocuments("MSFT");
+    checkAll(ohlcDay);
   }
 });
 
@@ -143,7 +144,7 @@ const getMinuteData = async (ticker) => {
       }
       // Else use the artificial data stream for every minute
     } else {
-      let data = JSON.parse(fs.readFileSync("./assets/responseData.json"));
+      let data = JSON.parse(fs.readFileSync("./assets/json/responseData.json"));
 
       placeholder = { c: [], h: [], l: [], o: [], t: [], v: [] };
 
@@ -159,7 +160,7 @@ const getMinuteData = async (ticker) => {
       devCounter++;
       if (
         devCounter ===
-        JSON.parse(fs.readFileSync("./assets/responseData.json")).t.length
+        JSON.parse(fs.readFileSync("./assets/json/responseData.json")).t.length
       ) {
         devCounter = 0;
       }
@@ -353,6 +354,40 @@ const checkAndCreateDailyDocuments = async (ticker) => {
   } catch (err) {
     console.error(err.name, err.message, err.lineNumber);
   }
+};
+
+// This function goes and saves a json object that contains a list of all days in database 
+// Which will then be queried by the get request, as it's much quicker than doing this query every time
+const checkAll = async (ohlcDay) => {
+
+  var query = await ohlcDay.find({ ticker: "MSFT" });
+
+  let payload = [];
+
+  for (let i = 0; i < query.length; i++) {
+    payload.push(query[i].day);
+  }
+
+  // Getting rid of duplicates 
+  let uniquePayload = [...new Set(payload)];
+
+  // Converting to ms to organize into ascending order 
+  uniquePayload = uniquePayload.map((element) => {
+    return Date.parse(element);
+  });
+
+  // Sorting in ascending order 
+  uniquePayload = uniquePayload.sort((a, b) => {
+    return a - b;
+  });
+
+  // Converting back to date string
+  uniquePayload = uniquePayload.map((element) => {
+    return new Date(element).toDateString();
+  });
+
+  fs.writeFileSync("./assets/json/allOhlc.json", JSON.stringify(uniquePayload));
+
 };
 
 const formatData = (ohlcDays, buySellDays, timeSteps) => {
@@ -692,8 +727,10 @@ const createBotBuySell = async (ticker) => {
 // Start-up functions
 if (!productionMode) {
   checkAndCreateDailyDocuments("MSFT");
+  checkAll(ohlcDay);
 } else if (checkMarketOpen(new Date(), holidays)) {
   checkAndCreateDailyDocuments("MSFT");
+  checkAll(ohlcDay);
 }
 
 module.exports.checkMarketOpen = checkMarketOpen;

@@ -1,8 +1,10 @@
 const express = require("express"),
   router = express.Router(),
+  fs = require("fs"),
+  path = require("path"),
   ohlcDay = require("../../models/ohlcDay");
 
-// @route GET api/charts
+// @route GET api/ohlc/
 // @desc Send chart data to front end
 // @access Public
 router.get("/", async (req, res) => {
@@ -19,34 +21,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @route GET api/ohlc/daysList
+// @desc Send chart data to front end
+// @access Public
 router.get("/daysList", async (req, res) => {
   try {
 
-    var query = await ohlcDay.find({ ticker: "MSFT" });
-
-    let payload = [];
-
-    for (let i = 0; i < query.length; i++) {
-      payload.push(query[i].day);
-    }
-
-    // Getting rid of duplicates 
-    let uniquePayload = [...new Set(payload)];
-
-    // Converting to ms to organize into ascending order 
-    uniquePayload = uniquePayload.map((element) => {
-      return Date.parse(element);
-    });
-
-    // Sorting in ascending order 
-    uniquePayload = uniquePayload.sort((a, b) => {
-      return a - b;
-    });
-
-    // Converting back to date string
-    uniquePayload = uniquePayload.map((element) => {
-      return new Date(element).toDateString();
-    });
+    var uniquePayload = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../assets/json/allOhlc.json")));
 
     // Returning the array
     res.json(uniquePayload);
