@@ -7,7 +7,7 @@
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "node --max_old_space_size=8192 --optimize_for_size --prefix backend server"
+    "start": "--prefix backend && node --max_old_space_size=8192 --optimize_for_size server"
   },
   "repository": {
     "type": "git",
