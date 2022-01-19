@@ -167,9 +167,18 @@ var Charts = ({
   const { data, xScale, xAccessor, displayXAccessor } =
     xScaleProvider(calculatedData);
 
-  const start = xAccessor(last(data));
-  const end = xAccessor(data[Math.max(0, data.length - 150)]);
-  const xExtents = [start, end];
+  console.log(xScale);
+
+  // const start = xAccessor(last(data));
+  // const end = xAccessor(data[Math.max(0, data.length - 150)]);
+  // const xExtents = [start, end];
+
+  // Will show min and max values for the date x axis
+  const xExtents = [xAccessor(data[0]), xAccessor(data[data.length - 1])];
+
+
+
+  console.log(xExtents);
 
   const longAnnotationProps = {
     y: ({ yScale, datum }) => yScale(datum.low),
@@ -259,7 +268,7 @@ var Charts = ({
       width={width}
       ratio={ratio}
       margin={margin}
-      type={"svg"}
+      type={"hybrid"}
       seriesName="MSFT"
       data={data}
       xScale={xScale}
@@ -374,7 +383,7 @@ var Charts = ({
         <XAxis
           axisAt="bottom"
           orient="bottom"
-          showTicks={false}
+          showTicks={(showPredictionChart) ? false : true}
           outerTickSize={0}
         />
         <YAxis axisAt="right" orient="right" tickValues={[30, 50, 70]} />

@@ -681,10 +681,11 @@ const createBuySellDay = async (ticker) => {
           console.log("Error creating buySellDay");
         } else {
           console.log(
-            "Creating buySellDay document for ticker:",
-            createdDoc.ticker,
-            "with day:",
-            createdDoc.day
+            chalk.magentaBright(
+              "Creating a new buySellDay document for ",
+              ticker,
+              new Date().toDateString()
+            )
           );
         }
       }
