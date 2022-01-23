@@ -729,10 +729,9 @@ const createBotBuySell = async (ticker) => {
 // Start-up functions
 if (!productionMode) {
   checkAndCreateDailyDocuments("MSFT");
-  checkAll(ohlcDay);
 } else if (checkMarketOpen(new Date(), holidays)) {
   checkAndCreateDailyDocuments("MSFT");
-  checkAll(ohlcDay);
 }
+checkAll(ohlcDay);
 
 module.exports.checkMarketOpen = checkMarketOpen;
