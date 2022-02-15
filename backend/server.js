@@ -9,10 +9,14 @@ const axios = require("axios"),
   schedule = require("node-schedule-tz"),
   path = require("path"),
   fs = require("fs"),
-  // tf = require("@tensorflow/tfjs-node-gpu"),
+  tf = require("@tensorflow/tfjs-node-gpu"),
   chalk = require("chalk");
 
 dotenv.config();
+
+const Data = require("./assets/data");
+const dumpError = require("./assets/logErrors");
+
 
 // Local functions
 const connectDB = require("./config/db"),
@@ -96,8 +100,16 @@ schedule.scheduleJob("0 0 0 * * 1-5", () => {
 schedule.scheduleJob("*/1 * * * *", async () => {
   try {
     if (!productionMode) {
+
+      // Getting the daily data for MSFT
       MSFT = await getMinuteData("MSFT");
+
+      // Saving ohlc data for MSFT
       ohlcSave("MSFT", MSFT);
+
+      // Predicting and saving
+      await predictAndSave("MSFT");
+
     } else if (checkMarketOpen(new Date(), holidays)) {
       MSFT = await getMinuteData("MSFT");
       ohlcSave("MSFT", MSFT);
@@ -204,6 +216,78 @@ changeStream.on("change", async (change) => {
 });
 
 // Functions ------------------------------------------------------
+
+const predictAndSave = async (ticker) => {
+  try {
+
+    // Uncomment to re-preprocess data
+    let ohlcDays = await ohlcDay.find({ ticker: "MSFT" });
+    let buySellDays = await buySellDay.find({ ticker: "MSFT" });
+
+    // Data processing
+    let data = new Data(ohlcDays, buySellDays, 150);
+
+    // True to make the calculation faster (instead of formatting all data)
+    let { featureArray } = data.format(true);
+
+    tf.engine().startScope();
+
+    // Load model for ticker
+    const model = await tf.loadLayersModel(
+      "file://assets/Models/" + ticker + "/model.json"
+    );
+    if (featureArray.length) {
+      // Make prediction
+      // Starting scope, fixing memory issues?
+      prediction = model
+        .predict(tf.tensor([featureArray[featureArray.length - 1]]))
+        .dataSync()[0];
+
+      console.log(
+        chalk.white.bold("Bots Prediction for " + ticker + ":"),
+        chalk.yellowBright(prediction)
+      );
+
+      let pushSaveObj = {
+        date: Math.floor(new Date().getTime() / 60000) * 60000, // divided by 100 000 because it will round the minute down because it's about 3 seconds behind
+        prediction: prediction,
+      };
+
+      await predictionDay.findOne(
+        { ticker: ticker, day: new Date().toDateString() },
+        (err, predictionDay) => {
+          if (err) {
+            console.log(err);
+          } else if (predictionDay !== null) {
+            predictionDay.predictionDaysArray.push(pushSaveObj);
+            predictionDay.save();
+
+            console.log(
+              chalk.blueBright(
+                "Updating predictionDay document for " +
+                predictionDay.ticker +
+                ", " +
+                predictionDay.day
+              )
+            );
+          } else {
+            console.log("PredictionDay not found");
+          }
+        }
+      ).clone();
+    } else {
+      console.log(
+        chalk.green("Not enough daily data to make a prediction")
+      );
+    }
+    tf.engine().endScope();
+    tf.disposeVariables();
+
+  } catch (err) {
+    dumpError(err);
+  }
+};
+
 const ohlcSave = async (ticker, dataObj) => {
   try {
     // Finding the document with the current day and ticker
@@ -389,110 +473,6 @@ const checkAll = async (ohlcDay) => {
   fs.writeFileSync("./assets/json/allOhlc.json", JSON.stringify(uniquePayload));
 
 };
-
-const formatData = (ohlcDays, buySellDays, timeSteps) => {
-  var trainingArray = matchInOut(ohlcDays, buySellDays);
-  trainingArray = addRSI(trainingArray); // Adding rsi to the data
-  trainingArray = addSMA(trainingArray, 20); // Adding SMA20 to the data
-  trainingArray = addSMA(trainingArray, 45); // Adding SMA45 to the data
-  trainingArray = percentScale(trainingArray, 6); // Scaling all the data to a percent scale (open, high, low, close, SMA20, SMA45)
-  trainingArray = movingStandardize(trainingArray, 180, 4); // Standardizing all of the data with a moving standard deviation of 180
-  trainingArray = minMaxNormalize(trainingArray, 8); // Converting all the values of the array between 0 and 1
-  var { featureArray, labelArray } = timeStepFormat(trainingArray, timeSteps);
-  featureArray = fixNaN(featureArray);
-  return { featureArray, labelArray };
-};
-
-// const predictAndSave = (ticker) => {
-//   try {
-//     ohlcDay
-//       .find({ ticker: ticker })
-//       .sort({ _id: -1 })
-//       .limit(2)
-//       .exec(async (err, NumOfDays) => {
-//         if (err) {
-//           console.error(err.name, err.message, err.lineNumber);
-//         } else {
-//           try {
-//             let ohlcDays = NumOfDays.reverse();
-//             let buySellDays = [];
-
-//             for (let i = 0; i < NumOfDays.length; i++) {
-//               buySellDays.push({
-//                 ticker: ohlcDays[i].ticker,
-//                 day: ohlcDays[i].day,
-//                 buySellDaysArray: [],
-//               });
-//             }
-
-//             var { featureArray } = formatData(ohlcDays, buySellDays, 10);
-
-//             tf.engine().startScope();
-
-//             // Load model for ticker
-//             const model = await tf.loadLayersModel(
-//               "file://assets/Models/" + ticker + "/model.json"
-//             );
-
-//             if (featureArray.length) {
-//               // Make prediction
-//               // Starting scope, fixing memory issues?
-//               prediction = model
-//                 .predict(tf.tensor([featureArray[featureArray.length - 1]]))
-//                 .dataSync()[0];
-
-//               console.log(
-//                 chalk.white.bold("Bots Prediction for " + ticker + ":"),
-//                 chalk.yellowBright(prediction)
-//               );
-
-//               let pushSaveObj = {
-//                 date: Math.floor(new Date().getTime() / 60000) * 60000, // divided by 100 000 because it will round the
-//                 prediction: prediction, // minute down because it's about 3 seconds behind
-//                 buy: false,
-//                 sell: false,
-//               };
-
-//               await predictionDay
-//                 .findOne(
-//                   { ticker: ticker, day: new Date().toDateString() },
-//                   (err, predictionDay) => {
-//                     if (err) {
-//                       console.error(err.name, err.message, err.lineNumber);
-//                     } else if (predictionDay !== null) {
-//                       predictionDay.predictionDaysArray.push(pushSaveObj);
-//                       predictionDay.save();
-
-//                       console.log(
-//                         chalk.blueBright(
-//                           "Updating predictionDay document for " +
-//                           predictionDay.ticker +
-//                           ", " +
-//                           predictionDay.day
-//                         )
-//                       );
-//                     } else {
-//                       console.log("PredictionDay not found");
-//                     }
-//                   }
-//                 )
-//                 .clone();
-//             } else {
-//               console.log(
-//                 chalk.green("Not enough daily data to make a prediction")
-//               );
-//             }
-//             tf.engine().endScope();
-//             tf.disposeVariables();
-//           } catch (err) {
-//             console.error(chalk.red(err.name, err.message, err.lineNumber));
-//           }
-//         }
-//       });
-//   } catch (err) {
-//     console.error(chalk.red(err.name, err.message, err.lineNumber));
-//   }
-// };
 
 // Database functions ----------------------------------------------
 const buySellAndSave = async (ticker) => {

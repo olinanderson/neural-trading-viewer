@@ -30,7 +30,8 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "assets/json/*"
+      "assets/json/*",
+      "assets/Models/*"
     ]
   }
 }

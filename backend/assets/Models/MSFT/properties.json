@@ -1,1 +1,105 @@
-{"properties":{"trainingRatio":1,"epochs":300,"batchSize":500,"timeSteps":10,"validationSplit":0.2,"timeStarted":1622521683629,"timeEnded":1622521699000}}
+{
+  "array": [
+    {
+      "epoch": 0,
+      "loss": "0.19",
+      "val_loss": "0.20",
+      "acc": "0.71",
+      "val_acc": "0.69"
+    },
+    {
+      "epoch": 1,
+      "loss": "0.19",
+      "val_loss": "0.22",
+      "acc": "0.72",
+      "val_acc": "0.63"
+    },
+    {
+      "epoch": 2,
+      "loss": "0.19",
+      "val_loss": "0.23",
+      "acc": "0.72",
+      "val_acc": "0.63"
+    },
+    {
+      "epoch": 3,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.71",
+      "val_acc": "0.69"
+    },
+    {
+      "epoch": 4,
+      "loss": "0.19",
+      "val_loss": "0.22",
+      "acc": "0.72",
+      "val_acc": "0.64"
+    },
+    {
+      "epoch": 5,
+      "loss": "0.19",
+      "val_loss": "0.22",
+      "acc": "0.72",
+      "val_acc": "0.64"
+    },
+    {
+      "epoch": 6,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.67"
+    },
+    {
+      "epoch": 7,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.67"
+    },
+    {
+      "epoch": 8,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.67"
+    },
+    {
+      "epoch": 9,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.69"
+    },
+    {
+      "epoch": 10,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.69"
+    },
+    {
+      "epoch": 11,
+      "loss": "0.19",
+      "val_loss": "0.20",
+      "acc": "0.72",
+      "val_acc": "0.70"
+    },
+    {
+      "epoch": 12,
+      "loss": "0.19",
+      "val_loss": "0.21",
+      "acc": "0.72",
+      "val_acc": "0.66"
+    }
+  ],
+  "modelParams": {
+    "ticker": "MSFT",
+    "epochs": 1000,
+    "batchSize": 512,
+    "validationSplit": 0.075,
+    "featureLength": 5,
+    "timeSteps": 150,
+    "featureTensorShape": [94185, 150, 5],
+    "labelTensorShape": [94185]
+  }
+}
